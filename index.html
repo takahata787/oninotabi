@@ -9,7 +9,7 @@
      SNSシェア用の設定（OGP）
      公開URL：https://takahata787.github.io/oninotabi/
      ※このアプリを別の場所に移した場合は、
-       下の3か所のアドレスを新しいものに書き換えてください。
+       下のアドレスを新しいものに書き換えてください。
 ============================================================ -->
 <meta property="og:type"        content="website">
 <meta property="og:title"       content="おにのたび診断｜たかっき＆はたっきの高畠ツアーガイド">
@@ -260,6 +260,31 @@
   .meta span{background:rgba(255,255,255,.24);border-radius:8px;
     padding:5px 11px;font-size:13px;font-weight:700;}
 
+  /* ============================================================
+     プラン切替時のハイライト演出
+     ============================================================ */
+  .card-hd.flash{
+    animation:hdFlash 1.5s ease-out both;
+  }
+  @keyframes hdFlash{
+    0%{
+      filter:brightness(1);
+      box-shadow:inset 0 0 0 0 rgba(255,255,255,0);
+    }
+    18%{
+      filter:brightness(1.28);
+      box-shadow:inset 0 0 0 5px rgba(255,255,255,.85);
+    }
+    45%{
+      filter:brightness(1.10);
+      box-shadow:inset 0 0 0 3px rgba(255,255,255,.45);
+    }
+    100%{
+      filter:brightness(1);
+      box-shadow:inset 0 0 0 0 rgba(255,255,255,0);
+    }
+  }
+
   .viewing{
     background:var(--hata-lt);border:2px solid var(--hata);
     border-radius:12px;padding:11px 14px;margin-bottom:14px;
@@ -278,6 +303,32 @@
   .viewing.shared b{color:var(--taka-dp);}
   .viewing.shared button{border-color:var(--taka);color:var(--taka-dp);}
   .viewing.shared button:hover{background:var(--taka);color:#fff;}
+
+  .viewing.flash{
+    animation:vwFlash 1.5s ease-out both;
+  }
+  @keyframes vwFlash{
+    0%{
+      background:var(--hata-lt);
+      box-shadow:0 0 0 0 rgba(123,184,212,0);
+      transform:scale(1);
+    }
+    14%{
+      background:#fff8d8;
+      box-shadow:0 0 0 8px rgba(232,145,138,.32);
+      transform:scale(1.02);
+    }
+    46%{
+      background:#fffdf0;
+      box-shadow:0 0 0 4px rgba(232,145,138,.14);
+      transform:scale(1);
+    }
+    100%{
+      background:var(--hata-lt);
+      box-shadow:0 0 0 0 rgba(123,184,212,0);
+      transform:scale(1);
+    }
+  }
 
   .body{padding:18px;}
   .access{
@@ -401,6 +452,18 @@
   .winter li{margin-bottom:4px;}
   .winter li:last-child{margin-bottom:0;}
   .winter b{color:#3F5C7A;}
+  /* 施設ごとの営業時間（入れ子の箇条書き） */
+  .winter ul.hours{
+    margin:5px 0 0;padding-left:16px;
+    list-style:none;
+  }
+  .winter ul.hours li{
+    margin-bottom:2px;font-size:13px;
+    position:relative;padding-left:12px;
+  }
+  .winter ul.hours li::before{
+    content:"・";position:absolute;left:0;color:var(--winter);font-weight:700;
+  }
 
   .taxi{background:#fff;border:2px solid var(--hata);border-radius:12px;
     padding:13px 15px;margin-top:14px;font-size:14px;}
@@ -423,31 +486,6 @@
   .alt{font-size:13.5px;background:#fff;border:1px dashed var(--hata);
     border-radius:12px;padding:13px;margin-top:14px;}
   .alt b{color:var(--hata-dp);}
-
-  /* ===== 保存のご案内 ===== */
-  .savebox{
-    background:#fff;border:2px solid var(--accent);
-    border-radius:14px;padding:15px;margin-top:16px;
-  }
-  .savebox h3{margin:0 0 4px;font-size:15.5px;color:var(--accent-dp);}
-  .savebox p{margin:0 0 12px;font-size:12.5px;color:#7a6a66;}
-  .savebtn{
-    display:block;width:100%;cursor:pointer;
-    background:linear-gradient(100deg,var(--taka),var(--accent));
-    color:#fff;border:none;border-radius:99px;
-    padding:14px;font-size:16px;font-weight:700;font-family:inherit;
-    box-shadow:0 3px 10px rgba(217,122,108,.30);
-    transition:filter .15s, transform .12s;
-  }
-  .savebtn:hover{filter:brightness(1.07);}
-  .savebtn:active{transform:translateY(2px);}
-  .savebtn:focus-visible{outline:3px solid var(--hata);outline-offset:3px;}
-  .savehow{
-    margin-top:11px;padding:11px 13px;
-    background:var(--note);border-radius:10px;
-    font-size:12px;line-height:1.75;
-  }
-  .savehow b{color:var(--accent-dp);}
 
   /* ============================================================
      シェア機能
@@ -485,6 +523,10 @@
     font-size:12px;line-height:1.75;
   }
   .sharehow b{color:var(--hata-dp);}
+  .sharehow .keep{
+    display:block;margin-top:6px;padding-top:6px;
+    border-top:1px dashed rgba(74,140,172,.35);
+  }
 
   /* ===== 次点のおすすめプラン ===== */
   .runner{
@@ -672,11 +714,15 @@
     .sharebtns{grid-template-columns:1fr;}
   }
   @media(prefers-reduced-motion:reduce){
-    .startbtn,.titleimg,.btn-next.ready,.anaba-box{animation:none;}
+    .startbtn,.titleimg,.btn-next.ready,.anaba-box,
+    .card-hd.flash,.viewing.flash{animation:none;}
   }
 
   /* ============================================================
-     印刷用の体裁（PDF保存にも使われます）
+     印刷用の体裁
+     ※画面上の「印刷・PDFで保存」ボタンは廃止しましたが、
+       利用者がブラウザの印刷機能（Ctrl+P など）を使ったときに
+       きれいに出力されるよう、この設定は残しています。
      ============================================================ */
   @media print{
     @page{margin:12mm;}
@@ -687,7 +733,7 @@
     .wrap{max-width:100%;padding:0;}
 
     header.hd,
-    .btns,.savebox,.sharebox,.runner,.viewing,.toggle,
+    .btns,.sharebox,.runner,.viewing,.toggle,
     .more,.talk,.foot,
     .anaba-btn,
     .navhint{display:none !important;}
@@ -700,6 +746,7 @@
     .card-hd{
       background:#eee !important;color:#000 !important;
       padding:10mm 8mm 6mm;
+      animation:none !important;filter:none !important;
     }
     .card-hd h2{font-size:20pt;text-shadow:none;}
     .badge{border:1px solid #666;background:none;color:#000;}
@@ -775,10 +822,14 @@
 <script>
 /* ============================================================
    おにのたび診断 ～たかっき＆はたっきの高畠ツアーガイド～
-   v15.1
+   v16.1
 
    公開URL：https://takahata787.github.io/oninotabi/
 
+   ------------------------------------------------------------
+   【文章表現のルール】
+     「〜っき」の語尾は、たかっき・はたっきのセリフでのみ使用します。
+     解説文・注意事項・施設紹介など、地の文では使用しません。
    ------------------------------------------------------------
    【画像ファイルの配置】index.html と同じ場所に置いてください
    ■ タイトル画面／全ページ共通の背景
@@ -801,27 +852,25 @@
      02ootaki.jpeg / 02goshisan.jpeg / 02matsutake.jpg
      02zyoumon.jpg / 02date.jpg
    ------------------------------------------------------------
-   v15.1 変更点：
-     - OGP／Twitterカードのアドレスを公開URLに設定
-       https://takahata787.github.io/oninotabi/
-   v15.0 変更点：
-     ★シェア機能を追加
-       - Web Share API（スマホの共有メニュー）
-       - X（旧Twitter）投稿 / LINE送信 / リンクのコピー
-       - 診断結果をURLで再現（#t=型番号&a=出発地&m=交通手段）
-       - 共有URLで開いた方へのご案内バー
-     ★型2を案①に変更（Googleマップの確認値を反映）
-       太陽館 →(徒歩14分/1.0km)→ ワイナリー
-              →(まほろばの緑道 徒歩35分/2.7km)→ 浜田広介記念館
-              →(徒歩25分/2.0km)→ 太陽館（昼食・温泉）
-       歩行距離：約5.7km
-     ★無料表記を確定（亀岡文殊堂・観音岩・犬の宮猫の宮・日向洞窟）
-     ★昼食・カフェの基準点を「高畠町商工会」に設定
-       高畠町高畠940-2（旧高畠駅舎・昭和縁結び通りの近く）
-     ★型6の冬季対応（10分前倒し）／型8の返却時刻の注記
+   v16.1 変更点（文章の見直し 12件）：
+     1. 稲子まつたけ山のリンクを 1032/ → 1032.html に差し替え
+     2. TYPE 01 キャッチコピー「ひと日」→「一日」
+     3. TYPE 10 キャッチコピーを変更
+     4. 道の駅たかはた 紹介文を変更
+     5. よねおりかんこうセンター 紹介文を変更
+     6. 亀岡文殊堂 紹介文「知恵」→「知慧」
+     7. 犬の宮・猫の宮 紹介文を変更
+     8. 浜田広介記念館 紹介文を変更
+     9. 旧高畠駅舎 紹介文を変更
+    10. 観音岩 紹介文を変更
+    11. TYPE 02 みどころ解説の「〜っき」を通常の文体に
+        （地の文では「〜っき」を使わないルールを徹底）
+    12. 冬季のご案内の営業時間を箇条書きに変更し、
+        施設名を正式名称でフル記載
+   v16.0：印刷・PDFボタン廃止、プラン切替の演出、型01の点数調整
+   v15.1：OGPのアドレスを公開URLに設定
+   v15.0：シェア機能、型2を案①に変更、無料表記の確定
    v14.0：緯度経度をもとに移動時間を再計算、冬季のご案内を追加
-   v13.1：型ごとの穴場セリフ、ブラウン×むしめがね
-   v13.0：穴場スポット5件を実装
 ============================================================ */
 
 /* ---------- タイトル画面の画像設定 ---------- */
@@ -847,7 +896,7 @@ const GUIDE = {
   q4:"taka", q5:"hata", q6:"hata", q7:"taka"
 };
 
-/* ---------- 合いの手コメント ---------- */
+/* ---------- 合いの手コメント（キャラクターのセリフ） ---------- */
 const REACT_Q0 = [
   /* 0 東京方面 */ ["遠くからありがとうございますっき",
                     "長い道のりをありがとうございますっき",
@@ -893,7 +942,7 @@ function reactMsg(qid, optIndex){
   return list[Math.floor(Math.random()*list.length)];
 }
 
-/* 結果画面のひとこと */
+/* 結果画面のひとこと（キャラクターのセリフ） */
 const RESULT_MSG = {
   1:{c:"taka",m:"はじめてなら、これがいちばんおすすめですっき"},
   2:{c:"taka",m:"緑道をゆっくり歩くと、季節が近くに感じられますっき"},
@@ -958,6 +1007,7 @@ const TAXI = [
 
 /* ============================================================
    冬季のご案内（全型に共通で表示します）
+     ★v16.1：営業時間を箇条書きにし、施設名を正式名称で記載
 ============================================================ */
 const WINTER_NOTE = {
   title:"❄ 冬季（12月〜3月）にお越しの方へ",
@@ -965,7 +1015,12 @@ const WINTER_NOTE = {
     "<b>積雪や季節営業の関係で、ご利用・ご観覧いただけないスポットがあります。</b>お出かけ前に各施設・観光協会へご確認ください。",
     "山間部（観音岩・日向洞窟・大滝・豪士山など）は、<b>積雪により立ち入りできない場合</b>があります。",
     "果物狩り・松茸狩りは<b>期間外</b>です。",
-    "施設の営業時間が短くなる場合があります（道の駅・よねおりかんこうセンターは17:00まで、ワイナリーは10:00〜16:30）。",
+    `施設の営業時間が短くなる場合があります。
+     <ul class="hours">
+       <li>道の駅たかはた … 17:00まで</li>
+       <li>よねおりかんこうセンター … 17:00まで</li>
+       <li>高畠ワイナリー … 10:00〜16:30</li>
+     </ul>`,
     "道路状況により、移動に時間がかかる場合があります。冬用タイヤでお越しください。",
     "レンタサイクル・ウォーキングは、路面の状況により難しい場合があります。"
   ]
@@ -975,6 +1030,7 @@ const WINTER_NOTE = {
    穴場スポット（はたっきがご案内）
 ============================================================ */
 const ANABA_UI = {
+  /* ↓ここはキャラクターのセリフなので「〜っき」を使います */
   hataMsg:"ひみつにしてた場所、特別に教えてやるっき・・・",
 
   hataMsgByType:{
@@ -1022,6 +1078,7 @@ const ANABA = [
     n:"稲子まつたけ山",
     d:"奥羽の山並みの扇状地に拓けた高畠町の、人気の松茸スポットです。例年9月中旬ごろから10月下旬ごろまでオープンしており、2,000円の入山券を購入すれば松茸狩りが一日（午前5時〜午後3時）楽しめます。採った松茸はすべて無料で持ち帰ることができます。",
     img:"02matsutake.jpg",
+    /* ★v16.1：リンクを差し替え */
     url:"https://www.town.takahata.yamagata.jp/soshiki/8/1032.html",
     memo:"入山券2,000円。開設時期・受付は事前にご確認ください"
   },
@@ -1062,10 +1119,12 @@ const LUNCH_BASE = {
 /* ============================================================
    スポットマスタ
      ★所要時間・料金・営業時間は提供資料に準拠しています
+     ★v16.1：紹介文を見直し（句点「。」で統一）
 ============================================================ */
 const S = {
   michinoeki:{
-    n:"道の駅たかはた", d:"観光案内と地元の農産物・加工品が揃う玄関口。",
+    n:"道の駅たかはた",
+    d:"観光案内と地元の農産物・加工品がそろう高畠観光の玄関口。",
     img:"mitinoeki.png", stay:"45分",
     url:"https://www.rstakahata.com/",
     fee:"入場無料（昼食の目安 1,000円）",
@@ -1096,7 +1155,8 @@ const S = {
     rest:"年中無休（年末年始・冬季に定休日あり）"
   },
   yoneori:{
-    n:"よねおりかんこうセンター", d:"織物の実演見学や機織り体験ができる、置賜の織物の拠点。",
+    n:"よねおりかんこうセンター",
+    d:"高畠、置賜の\"うまいもの\"が勢ぞろい！食とお土産の立ち寄りスポット。",
     img:"yoneori.png", stay:"45分",
     url:"https://yoneorikankou.com/",
     open:"9:00〜17:30（12〜3月は17:00まで）",
@@ -1109,7 +1169,8 @@ const S = {
     fee:"入場無料"
   },
   kyueki:{
-    n:"旧高畠駅舎", d:"高畠石で建てられた駅舎。まほろばの緑道に静かに残る。",
+    n:"旧高畠駅舎",
+    d:"高畠石で建てられた旧駅舎。かつての鉄道の面影を今に伝える。",
     img:"kyuueki.png", stay:"30分",
     url:"https://takahata.info/log/?l=189211",
     fee:"観覧無料"
@@ -1121,7 +1182,8 @@ const S = {
     memo:"最寄り駐車場は多目的広場"
   },
   hirosuke:{
-    n:"浜田広介記念館", d:"「泣いた赤おに」の作者・浜田広介の故郷の館。",
+    n:"浜田広介記念館",
+    d:"『泣いた赤おに』の作者、浜田広介の童話世界にふれる記念館。",
     img:"hirosuke.png", stay:"60分",
     url:"https://hirosuke-kinenkan.jp/",
     fee:"大人500円／学生300円／小中学生200円",
@@ -1137,13 +1199,14 @@ const S = {
     rest:"温泉は第2月曜日（祝日の場合は翌日）"
   },
   kamemon:{
-    n:"亀岡文殊堂", d:"日本三文殊のひとつ。知恵を授かる祈願の地。",
+    n:"亀岡文殊堂", d:"日本三文殊のひとつ。知慧を授かる祈願の地。",
     img:"kameokamonzyu.png", stay:"60分",
     url:"https://kameokamonju.jp/",
     fee:"拝観無料（駐車場も無料）"
   },
   inuneko:{
-    n:"犬の宮・猫の宮", d:"動物の恩に報いた伝説が伝わる、ふたつの社。",
+    n:"犬の宮・猫の宮",
+    d:"人々を救った犬と猫を祀る、全国でも珍しいふたつの社。",
     img:"dog.jpg", stay:"30分",
     url:"https://yamagatakanko.com/attractions/detail_1423.html",
     fee:"参拝無料（駐車場も無料）"
@@ -1157,7 +1220,7 @@ const S = {
   },
   kannon:{
     n:"観音岩（二井宿地区）",
-    d:"ジブリの世界のような自然の山道を登ると、たくさんの観音像と、大岩に彫られた延命観音に出会えます。",
+    d:"深い緑に包まれた山道を登ると、次々と現れる観音像。その先では、大岩に彫られた延命観音が静かに迎えてくれます。",
     img:"kannonn.png", stay:"60分",
     url:"https://takahata.info/log/?l=67821",
     fee:"入場無料（駐車場も無料）",
@@ -1183,7 +1246,7 @@ const S = {
     url:"https://takahata-gurunavi.jp/",
     memo:"高畠グルメナビでお店を探せます"
   },
-  /* 型2用：高畠駅周辺でのお昼（案①） */
+  /* 型2用：高畠駅周辺でのお昼 */
   lunchStation:{
     n:"昼食（高畠駅周辺）", d:"歩いて戻って、ひと休み。地元の味を楽しむ時間。",
     logo:"gourmetnavi.png", stay:"60分",
@@ -1216,6 +1279,7 @@ const MODE = {
 
 /* ============================================================
    型ごとの「みどころ」
+     ★v16.1：地の文なので「〜っき」は使いません
 ============================================================ */
 const HIGHLIGHT = {
   2:{t:"🌿 まほろばの緑道を歩く旅",
@@ -1226,8 +1290,8 @@ const HIGHLIGHT = {
         沿線には<b>桜が約700本</b>。春は桜のトンネルをくぐるように歩けます。</p>
         <p>とくに<b>ワイナリーから浜田広介記念館までの約2.7km</b>は、
         緑道をまっすぐ北へ歩く、いちばん気持ちのいい区間です。
-        車の音から離れて、田園と季節の草花にかこまれた道が続きますっき。</p>
-        <p>童話の世界へ向かう道のりを、ゆっくりお楽しみくださいっき。</p>`},
+        車の音から離れて、田園と季節の草花にかこまれた道が続きます。</p>
+        <p>童話の世界へ向かう道のりを、ゆっくりお楽しみください。</p>`},
   7:{t:"🌿 まほろばの緑道を走る",
      b:`<p><b>まほろばの緑道</b>は、廃線跡を整備した約6kmの道です。
         線路の跡なので<b>起伏が少なく、自転車でも走りやすい</b>のが特長です。</p>
@@ -1243,7 +1307,7 @@ const TYPES = {
      型1：王道
   --------------------------------------------------------- */
   1:{no:"TYPE 01",name:"はじめての高畠 王道1日",
-     catch:"迷ったらこれ。町のいちばんを、ひと日でまるごと。",
+     catch:"迷ったらこれ。町のいちばんを、一日でまるごと。",
      meta:["🚗 車","⏱ 約7時間","💰 約6,000円"],cost:"約6,000円",
      costNote:"昼食1,000円＋入館料200円＋ワイナリー等の土産4,800円",
      plan:[
@@ -1273,7 +1337,7 @@ const TYPES = {
      ]},
 
   /* ---------------------------------------------------------
-     型2：緑道ウォーキング（案①／Googleマップの確認値を反映）
+     型2：緑道ウォーキング
        太陽館 →(徒歩14分/1.0km)→ ワイナリー
               →(緑道 徒歩35分/2.7km)→ 浜田広介記念館
               →(徒歩25分/2.0km)→ 太陽館（昼食・温泉）
@@ -1401,7 +1465,7 @@ const TYPES = {
      ]},
 
   /* ---------------------------------------------------------
-     型6：フォト（冬季対応で10分前倒し）
+     型6：フォト
   --------------------------------------------------------- */
   6:{no:"TYPE 06",name:"絶景フォトさんぽ",
      catch:"石と塔と、昭和の商店街。撮りたい景色だけを繋いで。",
@@ -1532,7 +1596,7 @@ const TYPES = {
      型10：観音岩さんぽ
   --------------------------------------------------------- */
   10:{no:"TYPE 10",name:"観音岩さんぽ",
-     catch:"森の中の観音さま。物語のような山道を、ゆっくりと。",
+     catch:"森の中の観音様。物語のような山道をゆっくり歩く。",
      meta:["🚗 車＋歩き","⏱ 約6時間","💰 約3,500円"],cost:"約3,500円",
      costNote:"昼食1,000円＋入浴料400円＋飲料・土産2,000円",
      trekking:true,
@@ -1620,7 +1684,8 @@ const QS = [
 
   {id:"q2",q:"今回の旅行でいちばんやりたいことは？",
    opts:[
-     {l:"名所をとにかく巡りたい（王道）",sc:{1:5,2:2,3:1,4:2,5:1,6:2,7:3,8:1,9:2,10:1}},
+     /* 王道 型1：6点（v16.0で5→6に引き上げ） */
+     {l:"名所をとにかく巡りたい（王道）",sc:{1:6,2:2,3:1,4:2,5:1,6:2,7:3,8:1,9:2,10:1}},
      {l:"おいしいもの・お酒を楽しみたい",sc:{1:2,2:2,3:5,4:0,5:2,6:1,7:1,8:2,9:1,10:0}},
      {l:"自然の中でのんびり・体を動かしたい",sc:{1:1,2:4,3:1,4:1,5:2,6:1,7:4,8:5,9:3,10:5}},
      {l:"歴史や物語に触れたい",sc:{1:2,2:2,3:0,4:5,5:2,6:1,7:2,8:1,9:2,10:2}},
@@ -1660,13 +1725,13 @@ const QS = [
 
   {id:"q6",q:"好みに近いものを選んでください",hint:"複数選択できます",multi:true,
    opts:[
-     {l:"サイクリング・ウォーキング",sub:"緑道を走る、緑の中を歩く",
+     /* 0 */ {l:"サイクリング・ウォーキング",sub:"緑道を走る、緑の中を歩く",
       sc:{1:1,2:5,3:0,4:1,5:2,6:1,7:4,8:5,9:2,10:6},outdoor:true},
-     {l:"買い物・お土産",sc:{1:3,2:2,3:3,4:0,5:2,6:1,7:2,8:1,9:1,10:1}},
-     {l:"歴史・遺跡",sc:{1:2,2:1,3:0,4:5,5:1,6:2,7:2,8:1,9:2,10:3}},
-     {l:"グルメ・ワイン",sc:{1:2,2:2,3:5,4:0,5:1,6:1,7:1,8:1,9:1,10:1}},
-     {l:"写真・映えスポット",sc:{1:1,2:2,3:1,4:1,5:0,6:5,7:3,8:2,9:1,10:2}},
-     {l:"静かに過ごす・癒し",sc:{1:1,2:4,3:1,4:2,5:0,6:1,7:1,8:0,9:3,10:4}}
+     /* 1 */ {l:"買い物・お土産",sc:{1:3,2:2,3:3,4:0,5:2,6:1,7:2,8:1,9:1,10:1}},
+     /* 2 */ {l:"歴史・遺跡",sc:{1:2,2:1,3:0,4:5,5:1,6:2,7:2,8:1,9:2,10:3}},
+     /* 3 */ {l:"グルメ・ワイン",sc:{1:2,2:2,3:5,4:0,5:1,6:1,7:1,8:1,9:1,10:1},tagFood:true},
+     /* 4 */ {l:"写真・映えスポット",sc:{1:1,2:2,3:1,4:1,5:0,6:5,7:3,8:2,9:1,10:2},tagPhoto:true},
+     /* 5 */ {l:"静かに過ごす・癒し",sc:{1:1,2:4,3:1,4:2,5:0,6:1,7:1,8:0,9:3,10:4}}
    ]},
 
   {id:"q7",q:"自転車では、どのくらい走りたいですか？",
@@ -1680,9 +1745,20 @@ const QS = [
    ]}
 ];
 
+/* ============================================================
+   掛け合わせ加点の設定
+     「写真・映えスポット」と「グルメ・ワイン」を両方選んだ方は
+     結果として"町のいちばん"を広く回りたい志向とみなし、
+     型01（王道）に加点します。
+============================================================ */
+const COMBO_BONUS = {
+  photoFood:{ type:1, point:2 }
+};
+
 /* ---------- 状態 ---------- */
 let idx=0, ans={}, oneway=true, reacting=null, viewType=null, anabaOpen=false;
 let sharedMode=false;   /* 共有URLから開かれた状態 */
+let flashOnRender=false;/* 次の描画でハイライトを出すか */
 
 function setTitleMode(on){
   document.body.classList.toggle("titlemode", !!(on && TITLE_UI.USE_IMG));
@@ -1762,6 +1838,11 @@ function shareBoxHtml(){
     <div class="sharehow">
       <b>シェアしたリンクを開くと、このプランがそのまま表示されます。</b><br>
       受け取った方は、そのまま診断をやり直すこともできます。
+      <span class="keep">
+        <b>あとから見返したい方へ：</b>「リンクをコピー」でURLを控え、
+        ご自身宛のメールやメモ、LINEのご自分だけのトークに送っておくと、
+        お出かけ当日にすぐ開けます。
+      </span>
     </div>
   </div>`;
 }
@@ -1913,6 +1994,20 @@ function judge(){
   const q6sel=(ans.q6||[]).slice(0,2);
   q6sel.forEach(i=>{ if(q6Obj && q6Obj.opts[i]) add(q6Obj.opts[i]); });
 
+  /* 掛け合わせ加点：「写真・映え」＋「グルメ・ワイン」→ 型01に +2 */
+  let comboPhotoFood = false;
+  if(q6Obj){
+    const hasPhoto = q6sel.some(i=>q6Obj.opts[i] && q6Obj.opts[i].tagPhoto);
+    const hasFood  = q6sel.some(i=>q6Obj.opts[i] && q6Obj.opts[i].tagFood);
+    if(hasPhoto && hasFood){
+      const cb = COMBO_BONUS.photoFood;
+      if(sc[cb.type] != null){
+        sc[cb.type] += cb.point;
+        comboPhotoFood = true;
+      }
+    }
+  }
+
   const outdoor = q6sel.some(i=>q6Obj && q6Obj.opts[i] && q6Obj.opts[i].outdoor)
                   || ans.q2===2;
   let bikeBoost=false;
@@ -1940,7 +2035,7 @@ function judge(){
     .sort((a,b)=>sc[b]-sc[a])
     .slice(0,2);
 
-  return {win,sc,cand,noBike,bikeBoost,outdoor,undecided,runners};
+  return {win,sc,cand,noBike,bikeBoost,outdoor,undecided,runners,comboPhotoFood};
 }
 
 /* ============================================================
@@ -1999,7 +2094,7 @@ function renderTitle(){
       7つの質問にお答えいただくと、10種類のプランから
       あなたに合った1日の過ごし方をご提案します。<br>
       すべてのプランは<b>JR高畠駅「太陽館」</b>を起点にご案内します。<br>
-      診断結果は<b>PDFとして保存</b>したり、<b>SNSでシェア</b>できます。
+      診断結果は<b>SNSでシェア</b>したり、<b>リンクを控えて</b>あとから見返せます。
     </div>`;
 
   h+=`</div>`;
@@ -2008,7 +2103,7 @@ function renderTitle(){
   const st=document.getElementById("start");
   if(st) st.onclick=()=>{
     idx=0; ans={}; reacting=null; viewType=null; anabaOpen=false;
-    sharedMode=false;
+    sharedMode=false; flashOnRender=false;
     if(location.hash) history.replaceState(null,"",SHARE_BASE);
     renderQ();
   };
@@ -2288,31 +2383,12 @@ function anabaHtml(typeNo){
   return h;
 }
 
-/* ============================================================
-   結果の保存（印刷・PDF）
-============================================================ */
-function saveHtml(){
-  return `<div class="savebox">
-    <h3>📄 この結果を保存する</h3>
-    <p>あとから見返せるように、PDFとして保存できます。紙に印刷してお持ちいただくこともできます。</p>
-    <button class="savebtn" id="printbtn" type="button">
-      印刷・PDFで保存する</button>
-    <div class="savehow">
-      <b>パソコンの場合</b>：印刷画面の「プリンター」から
-      「PDFに保存」を選んでください。<br>
-      <b>スマートフォンの場合</b>：印刷画面から「PDF」を選ぶか、
-      共有メニューの「プリント」→ 指を広げる操作でPDFになります。<br>
-      ※穴場スポットを開いた状態で保存すると、そちらも一緒に残ります。
-    </div>
-  </div>`;
-}
-
 /* ---------- 次点のおすすめプラン ---------- */
 function runnerHtml(runners){
   if(!runners || !runners.length) return "";
   let h=`<div class="runner">
     <h3>🔍 こちらのプランもおすすめです</h3>
-    <p class="lead2">ご回答に近いプランをもう少しご紹介します。押すと内容が切り替わります。</p>`;
+    <p class="lead2">ご回答に近いプランをもう少しご紹介します。押すと画面の上に戻り、内容が切り替わります。</p>`;
   runners.forEach(t=>{
     const R=TYPES[t];
     if(!R) return;
@@ -2325,6 +2401,34 @@ function runnerHtml(runners){
   });
   h+=`</div>`;
   return h;
+}
+
+/* ============================================================
+   プラン切替：上へ戻ってハイライト
+============================================================ */
+function switchPlan(newType){
+  viewType = (newType === null) ? null : +newType;
+  flashOnRender = true;
+  renderResult();
+}
+
+/* ハイライト演出を実行する
+   （クラスを一度外してから付け直すことで、再度再生されます） */
+function runFlash(){
+  const targets = [
+    document.querySelector(".card-hd"),
+    document.querySelector(".viewing")
+  ].filter(Boolean);
+
+  targets.forEach(el=>{
+    el.classList.remove("flash");
+    /* ブラウザに変更を認識させてから付け直します */
+    void el.offsetWidth;
+    el.classList.add("flash");
+    el.addEventListener("animationend", ()=>{
+      el.classList.remove("flash");
+    }, {once:true});
+  });
 }
 
 /* ---------- 描画：結果 ---------- */
@@ -2515,9 +2619,6 @@ function renderResult(){
   /* シェアのご案内 */
   h+=shareBoxHtml();
 
-  /* 保存のご案内 */
-  h+=saveHtml();
-
   /* 次点のおすすめプラン */
   h+=runnerHtml(r.runners);
 
@@ -2565,17 +2666,13 @@ function renderResult(){
   if(tw) tw.onclick=()=>{oneway=true;renderResult();};
   if(tr) tr.onclick=()=>{oneway=false;renderResult();};
 
-  /* 印刷・PDF保存 */
-  const pb=document.getElementById("printbtn");
-  if(pb) pb.onclick=()=>{ window.print(); };
-
   /* シェアボタン */
   bindShare(T, showType);
 
   /* 共有URLから開いた方の「自分で診断してみる」 */
   const ds=document.getElementById("do-shindan");
   if(ds) ds.onclick=()=>{
-    sharedMode=false; viewType=null; anabaOpen=false;
+    sharedMode=false; viewType=null; anabaOpen=false; flashOnRender=false;
     history.replaceState(null,"",SHARE_BASE);
     idx=0; ans={}; oneway=true; reacting=null;
     renderQ();
@@ -2594,42 +2691,49 @@ function renderResult(){
     }
   };
 
-  /* 次点プランのボタン */
+  /* 次点プランのボタン（上へ戻ってハイライト） */
   document.querySelectorAll(".rbtn").forEach(b=>{
-    b.onclick=()=>{
-      viewType = +b.dataset.t;
-      renderResult();
-    };
+    b.onclick=()=>{ switchPlan(+b.dataset.t); };
   });
 
+  /* いちばんのおすすめに戻る（同じ動作） */
   const bw=document.getElementById("back-win");
-  if(bw) bw.onclick=()=>{ viewType=null; renderResult(); };
+  if(bw) bw.onclick=()=>{ switchPlan(null); };
 
   document.getElementById("back-q").onclick=()=>{
     if(sharedMode){
       /* 共有で開いた場合は、そのまま診断へ進みます */
-      sharedMode=false; viewType=null;
+      sharedMode=false; viewType=null; flashOnRender=false;
       history.replaceState(null,"",SHARE_BASE);
       idx=0; ans={}; reacting=null; renderQ();
       return;
     }
     const list=activeQs();
     idx = Math.max(0, list.length - 1);
-    reacting=null; viewType=null;
+    reacting=null; viewType=null; flashOnRender=false;
     renderQ();
   };
   document.getElementById("again").onclick=()=>{
-    sharedMode=false;
+    sharedMode=false; flashOnRender=false;
     if(location.hash) history.replaceState(null,"",SHARE_BASE);
     idx=0;ans={};oneway=true;reacting=null;viewType=null;anabaOpen=false;renderQ();
   };
   document.getElementById("top").onclick=()=>{
-    sharedMode=false;
+    sharedMode=false; flashOnRender=false;
     if(location.hash) history.replaceState(null,"",SHARE_BASE);
     viewType=null; anabaOpen=false; renderTitle();
   };
 
-  if(!anabaOpen) window.scrollTo({top:0,behavior:"smooth"});
+  /* ===== 表示後のスクロールとハイライト ===== */
+  if(flashOnRender){
+    flashOnRender = false;
+    /* ページ最上部へ、するすると戻ります */
+    window.scrollTo({top:0,behavior:"smooth"});
+    /* スクロールが動き出したころに演出を開始します */
+    setTimeout(runFlash, 380);
+  }else if(!anabaOpen){
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
 }
 
 /* ---------- 起動 ---------- */
